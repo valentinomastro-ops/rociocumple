@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¡Feliz Cumpleaños Rocio! 🎂</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, Arial, sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      overflow: hidden;
+    }
+
+    /* Tarjeta */
+    .card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 24px;
+      max-width: 900px;
+      width: 95%;
+      box-shadow: 0 20px 40px rgba(0,0,0,.2);
+      text-align: center;
+      animation: pop 0.8s ease-out both;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #ff4d6d;
+      font-size: clamp(2rem, 5vw, 3rem);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    p {
+      color: #333;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(0,0,0,.15);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05) rotate(1deg);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: .3px;
+      box-shadow: 0 10px 20px rgba(255,77,109,.35);
+      transition: transform .1s ease, filter .1s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active { transform: translateY(1px); }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Lluvia de corazones */
+    .hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      top: -20px;
+      font-size: 18px;
+      opacity: 0.9;
+      animation: fall linear infinite;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,.15));
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) translateX(var(--drift)) rotate(360deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes pop {
+      from { transform: scale(.9); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @media (max-width: 600px) {
+      .gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Corazones -->
+  <div class="hearts" id="hearts"></div>
+
+  <div class="card">
+    <h1>¡Feliz Cumpleaños, Rocio! 🎉🎂</h1>
+    <p>Que tengas un día hermoso, lleno de amor, sonrisas y momentos lindos 💖</p>
+
+    <div class="gallery">
+      <img src="foto1.jpeg" alt="Foto 1 de Rocio">
+      <img src="foto2.jpeg" alt="Foto 2 de Rocio">
+    </div>
+
+    <button class="btn" onclick="masAmor()">Tirar más corazones 💕</button>
+
+    <div class="footer">Hecho con 💕</div>
+  </div>
+
+  <script>
+    const heartsContainer = document.getElementById("hearts");
+    const heartEmojis = ["💖","💘","💝","💗","💓","💞","❤️","🩷"];
+
+    function crearCorazones(cantidad = 30) {
+      for (let i = 0; i < cantidad; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        const size = Math.random() * 18 + 14; // 14px a 32px
+        const left = Math.random() * 100;
+        const duration = Math.random() * 4 + 4; // 4s a 8s
+        const drift = (Math.random() * 200 - 100) + "px";
+
+        h.style.left = left + "vw";
+        h.style.fontSize = size + "px";
+        h.style.animationDuration = duration + "s";
+        h.style.setProperty("--drift", drift);
+
+        heartsContainer.appendChild(h);
+
+        // Limpiar después de caer
+        setTimeout(() => h.remove(), duration * 1000);
+      }
+    }
+
+    function masAmor() {
+      crearCorazones(50);
+      // pequeño “rebote” de la tarjeta
+      const card = document.querySelector(".card");
+      card.animate(
+        [{ transform: "scale(1)" }, { transform: "scale(1.02)" }, { transform: "scale(1)" }],
+        { duration: 300, easing: "ease-out" }
+      );
+    }
+
+    // Lluvia suave inicial
+    setInterval(() => crearCorazones(12), 1200);
+  </script>
+</body>
+</html>
